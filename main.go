@@ -5,6 +5,7 @@ import (
 
 	"github.com/faridlan/belajar-restful-api/app"
 	"github.com/faridlan/belajar-restful-api/controller"
+	"github.com/faridlan/belajar-restful-api/exception"
 	"github.com/faridlan/belajar-restful-api/helper"
 	"github.com/faridlan/belajar-restful-api/repository"
 	"github.com/faridlan/belajar-restful-api/service"
@@ -28,6 +29,8 @@ func main() {
 	router.POST("/api/categories", categoryController.Create)
 	router.PUT("/api/categories/:categoryId", categoryController.Update)
 	router.DELETE("/api/categories/:categoryId", categoryController.Delete)
+
+	router.PanicHandler = exception.ErrorHandler
 
 	server := http.Server{
 		Addr:    "localhost:3000",
