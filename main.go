@@ -7,6 +7,7 @@ import (
 	"github.com/faridlan/belajar-restful-api/controller"
 	"github.com/faridlan/belajar-restful-api/exception"
 	"github.com/faridlan/belajar-restful-api/helper"
+	"github.com/faridlan/belajar-restful-api/middleware"
 	"github.com/faridlan/belajar-restful-api/repository"
 	"github.com/faridlan/belajar-restful-api/service"
 	"github.com/go-playground/validator/v10"
@@ -34,7 +35,7 @@ func main() {
 
 	server := http.Server{
 		Addr:    "localhost:3000",
-		Handler: router,
+		Handler: middleware.NewAuthMiddleware(router),
 	}
 
 	err := server.ListenAndServe()
