@@ -5,14 +5,12 @@ import (
 
 	"github.com/faridlan/belajar-restful-api/app"
 	"github.com/faridlan/belajar-restful-api/controller"
-	"github.com/faridlan/belajar-restful-api/exception"
 	"github.com/faridlan/belajar-restful-api/helper"
 	"github.com/faridlan/belajar-restful-api/middleware"
 	"github.com/faridlan/belajar-restful-api/repository"
 	"github.com/faridlan/belajar-restful-api/service"
 	"github.com/go-playground/validator/v10"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/julienschmidt/httprouter"
 )
 
 func main() {
@@ -23,18 +21,10 @@ func main() {
 	categoryService := service.NewCategoryService(categoryRepository, db, validate)
 	categoryController := controller.NewCategoryController(categoryService)
 
-	router := httprouter.New()
-
-	router.GET("/api/categories", categoryController.FindAll)
-	router.GET("/api/categories/:categoryId", categoryController.FindById)
-	router.POST("/api/categories", categoryController.Create)
-	router.PUT("/api/categories/:categoryId", categoryController.Update)
-	router.DELETE("/api/categories/:categoryId", categoryController.Delete)
-
-	router.PanicHandler = exception.ErrorHandler
+	router := app.NewRouter(categoryController)
 
 	server := http.Server{
-		Addr:    "localhost:3000",
+		Addr:    ":3000",
 		Handler: middleware.NewAuthMiddleware(router),
 	}
 
